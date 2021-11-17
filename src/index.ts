@@ -19,7 +19,7 @@ enum Cluster {
  */
 var option = {
     headers: {
-        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36',
+        'user-agent': process.env.USER_AGENT ? process.env.USER_AGENT : '',
         host: '',
         authority: '',
         'blog-version': 'wp',
@@ -29,32 +29,32 @@ var option = {
 
 const clusters = {
     caitlyn: {
-        urlRaw: path.relative('' , process.env.CAITLYN_URLS),
+        urlRaw: path.relative('' , './data/caitlyn/url.txt'),
         host: 'www.comparehero.my',
         authority: 'www.comparehero.my'
     },
     maokai: {
-        urlRaw: path.relative('' , process.env.MAOKAI_URLS),
+        urlRaw: path.relative('' , './data/maokai/url.txt'),
         host: 'www.moneyhero.com.hk',
         authority: 'www.moneyhero.com.hk'
     },
     trundle: {
-        urlRaw: path.relative('' , process.env.TRUNDLE_URLS),
+        urlRaw: path.relative('' , './data/trundle/url.txt'),
         host: 'www.moneyguru.co.th',
         authority: 'www.moneyguru.co.th'
     },
     sion: {
-        urlRaw: path.relative('' , process.env.SION_URLS),
+        urlRaw: path.relative('' , './data/sion/url.txt'),
         host: 'www.singsaver.com.sg',
         authority: 'www.singsaver.com.sg'
     },
     poppy: {
-        urlRaw: path.relative('' , process.env.POPPY_URLS),
+        urlRaw: path.relative('' , './data/poppy/url.txt'),
         host: 'www.moneymax.ph',
         authority: 'www.moneymax.ph'
     },
     twitch: {
-        urlRaw: path.relative('' , process.env.TWITCH_URLS),
+        urlRaw: path.relative('' , './data/twitch/url.txt'),
         host: 'www.money101.com.tw',
         authority: 'www.money101.com.tw'
     }
@@ -114,6 +114,9 @@ async function mapUrls(cluster: Cluster) {
  */
 async function orderAndFetch(cluster: Cluster) {
 
+    if (!process.env.USER_AGENT) 
+         throw new Error("Provide user agent in the .env file");
+
     let clr = cluster.toString() as keyof typeof clusters;
 
     option.headers.host = clusters[clr].host;
@@ -159,4 +162,4 @@ async function orderAndFetch(cluster: Cluster) {
 /**
  * Call the function with the specified cluster
  */
-//orderAndFetch(Cluster.sion);
+orderAndFetch(Cluster.sion);
